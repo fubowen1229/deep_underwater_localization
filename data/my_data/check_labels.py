@@ -5,11 +5,11 @@
 import os
 
 # the path of final_train.txt
-checked_txt_path = '/home/juling/PycharmProjects/deep_underwater_localization/data/my_data/final_train.txt'
+checked_txt_path = '/data4/fbw/deep_underwater_localization/data/my_data/final_train.txt'
 # the path of synthetic images
-syn_imgs_path = '/home/juling/deep_localization/synthetic/images/'
+syn_imgs_path = '/data4/fbw/deep_underwater_localization/dataset/synthetic/images/'
 # save path for new txt file after checked images and labels
-save_path = '/home/juling/PycharmProjects/deep_underwater_localization/data/my_data/'
+save_path = '/data4/fbw/deep_underwater_localization/data/my_data/'
 
 txt = open(os.path.join(save_path, 'synthetic_train.txt'), 'w')
 

@@ -2,6 +2,19 @@
 Source Code for the paper  **DeepURL: Deep Pose Estimation Framework for Underwater Relative Localization**, 
 accepted to IROS 2020. [[Paper]](https://arxiv.org/abs/2003.05523)
 
+### Note
+**Fu Bowen**
+1. The formats of labels in `final_train.txt` and `pool_test.txt` are different  
+No bbox in `pool_test.txt`  
+The last 18 numbers in `final_train.txt`: center_point_projection(2) & 3D_keypoint_projection(2*8)  
+The last 18 numbers in `pool_test.txt`: 3D_keypoint_projection(2*8) & we do not know what the last 2 numbers are  
+
+2. The test images are 1600 * 1200 (No. 0 - 9062), but the keypoints in `pool_test.txt` are labeled in 800 * 600 images  
+The test images need to be resized (No. 0 - 9062) 
+The test images are 800 * 600 (No. 9063 - )
+
+3. The unit of t (translation) is m, needs to mutiply 1000.0 to mm
+
 ### Introduction
 We propose a real-time deep-learning approach for determining the 6D relative pose of Autonomous Underwater  Vehicles (AUV) from single image. 
 Due  to  the  pro-found difficulty of collecting ground truth images with accurate 6D poses underwater, this work utilizes 
@@ -51,8 +64,9 @@ Extract the darknet checkpoint and place inside `./data/darknet_weights/` direct
 
 2. Download the synthetic dataset - `synthetic.zip` obtained after image-to-image translation using CycleGAN from [[AFRL DeepURL Dataset]](https://drive.google.com/drive/folders/1F0TxTIQDR1GJoZxdCPi6o5IMV-UyL0FL)
 and extract them. The training file is available as `.data/my_data/final_train.txt`. Each line in the training file represents each image
-in the format like `image_index image_absolute_path img_width img_height label_index 2D_bounding_box 3D_keypoint_projection`.
-2D_bounding_box format: `x_min y_min x_max y_max` top left -> (x_min,y_min) and bottom right -> (x_max, y_max). 3D_keypoint_projection contains
+in the format like `image_index image_absolute_path img_width img_height label_index`  
+`2D_bounding_box(4) center_point_projection(2) 3D_keypoint_projection(2*8)`.
+2D_bounding_box format: `x_min y_min x_max y_max` top left -> (x_min,y_min) and bottom right -> (x_max, y_max). 3D_keypoint_projection contains 
 the projections of 8 corners of Aqua (any other object you want to use) 3D object model in the image. 
 
     For example:
