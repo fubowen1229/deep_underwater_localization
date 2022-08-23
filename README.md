@@ -8,6 +8,7 @@ accepted to IROS 2020. [[Paper]](https://arxiv.org/abs/2003.05523)
 No bbox in `pool_test.txt`  
 The last 18 numbers in `final_train.txt`: center_point_projection(2) & 3D_keypoint_projection(2*8)  
 The last 18 numbers in `pool_test.txt`: 3D_keypoint_projection(2*8) & we do not know what the last 2 numbers are  
+The bbox in underwater dataset is `x_min y_min x_max y_max` while in bop format is `left, upper, width, height`  
 
 2. The test images are 1600 * 1200 (No. 0 - 9062), but the keypoints in `pool_test.txt` are labeled in 800 * 600 images  
 The test images need to be resized (No. 0 - 9062) 

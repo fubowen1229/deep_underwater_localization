@@ -97,7 +97,7 @@ if __name__ == '__main__':
                     mask[int(y), int(x), :] = 255
         except:
             pass
-        image=((0.5*mask + 0.5*image).astype(np.uint8))
+        image=((0.3*mask + 0.7*image).astype(np.uint8))
         
         cv2.imwrite(output_pth, image)
         print(f"Visualize {output_pth}")

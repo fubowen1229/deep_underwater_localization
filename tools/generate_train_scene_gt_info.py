@@ -23,12 +23,13 @@ if __name__ == '__main__':
             image_id = info[0]
             points_2d[image_id] = {}
 
-            points_2d[image_id]['image_pth'] = info[1]
+            points_2d[image_id]['image_pth']  = info[1]
             points_2d[image_id]['image_size'] = [int(i) for i in info[2:4]]
-            points_2d[image_id]['label'] = int(info[4]) # always 0 (only 1 class)
-            points_2d[image_id]['bbox'] = [int(i) for i in info[5:9]]
-            points_2d[image_id]['center_2d'] = [int(i) for i in info[9:11]] # different from test
-            points_2d[image_id]['corner_2d'] = [int(i) for i in info[11:27]]
+            points_2d[image_id]['label']      = int(info[4]) # always 0 (only 1 class)
+            bbox                              = [int(i) for i in info[5:9]] # x_min y_min x_max y_max
+            points_2d[image_id]['bbox']       = [bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]] # x y h w
+            points_2d[image_id]['center_2d']  = [int(i) for i in info[9:11]] # different from test
+            points_2d[image_id]['corner_2d']  = [int(i) for i in info[11:27]]
 
     # Calculate gt info
     scene_gt_info = {}
@@ -40,20 +41,21 @@ if __name__ == '__main__':
         gt_info = {}
         gt_info["bbox_obj"] = points_2d[key]['bbox']
         gt_info["bbox_visib"] = points_2d[key]['bbox']
-        gt_info["px_count_all"] = (points_2d[key]['bbox'][2] - points_2d[key]['bbox'][0] + 1) * (points_2d[key]['bbox'][3] - points_2d[key]['bbox'][1] + 1)
-        gt_info["px_count_valid"] = gt_info["px_count_all"]
-        gt_info["px_count_visib"] = gt_info["px_count_all"]
+
+        mask_image = os.path.join(bop_train_pth, '000001', 'mask', '{0:06d}_000000.png'.format(image_name))   
+        mask = cv2.imread(mask_image)[:, :, 0]
+        gt_info["px_count_all"] = np.count_nonzero(mask > 0)
+        gt_info["px_count_valid"] = 0.0
         gt_info["px_count_visib"] = gt_info["px_count_all"]
         gt_info["visib_fract"] = 1.0
 
-        # scene_gt[key].append(gt_pose)
         scene_gt_info[image_name].append(gt_info)
     
     scene_gt_info = dict(sorted(scene_gt_info.items()))
     print("Calculate gt info done")
 
     # Write pose file
-    scene_gt_json = os.path.join(bop_train_pth, 'scene_gt_info.json')
+    scene_gt_json = os.path.join(bop_train_pth, '000001', 'scene_gt_info.json')
 
     with open(scene_gt_json, 'w') as f:
         json.dump(scene_gt_info, f, indent=4)
